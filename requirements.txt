@@ -1,0 +1,8 @@
+fastapi==0.108.0
+pydantic==2.5.3
+starlette==0.32.0.post1
+typing_extensions==4.9.0
+alchemy==20.5
+gunicorn==21.2.0
+SQLAlchemy==2.0.25
+asyncpg==0.29.0

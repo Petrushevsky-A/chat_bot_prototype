@@ -1,0 +1,12 @@
+[Unit]
+Description=Chat bot docker service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a name_docker
+ExecStop=/usr/bin/docker stop -t 2 name_docker
+
+[Install]
+WantedBy=default.target
