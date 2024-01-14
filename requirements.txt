@@ -6,3 +6,4 @@ alchemy==20.5
 gunicorn==21.2.0
 SQLAlchemy==2.0.25
 asyncpg==0.29.0
+viberbot==1.0.12
