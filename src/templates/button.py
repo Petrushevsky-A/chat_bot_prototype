@@ -1,8 +1,7 @@
 
 class Button:
-    def __init__(self):
-        self.text = ''
-    
+    def __init__(self, text=''):
+        self.text = text
 
     def action():
         pass
@@ -15,6 +14,7 @@ class Button:
 
     def callback():
         pass
+
     def __dict__():
         pass
 

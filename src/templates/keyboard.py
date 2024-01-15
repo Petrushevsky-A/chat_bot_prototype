@@ -1,9 +1,8 @@
-
+from typing
 from .button import Button
 
 class Keyboard:
-    TYPE = "keyboard" //vk, tg, viber
-    BUTTONS = []
+    BUTTONS = []: List[List[Button]]
     
     def __add__(self, instance):
         return Keyboard().add_buttons(instance.BUTTONS)
@@ -31,83 +30,44 @@ class VkDateKeyboard:
         pass
 
 class DateKeyboard(Keyboard):
-    def __init__(self, type_bot):
-        self.buttons = [
-            [previous_dates_page, current_dates_page, next_dates_page],
-            [monday, tuesday, wednesday, thursday, friday, saturday, sunday],
-            [current_day, ],
-        ]
-{
-    "Type": "keyboard",
-    "Buttons": [{
-        "Columns": 6,
-        "Rows": 1,
-        "Text": "ФОП Готько",
-                "TextOpacity" : "0",
-                "BgMedia" : "https://i.ibb.co/7rzVkgc/gotko.jpg",
-        "TextHAlign": "left",
-        "TextVAlign": "middle",
-        "ActionType": "reply",
-        "ActionBody": "ФОП Готько"
-    }, {
-    "Columns": 6,
-    "Rows": 1,
-    "Text": "Полина",
-            "TextOpacity" : "0",
-            "BgMedia" : "https://i.ibb.co/7rsb6Pc/polina.jpg",
-    "TextHAlign": "left",
-    "TextVAlign": "middle",
-    "ActionType": "reply",
-    "ActionBody": "Полина"
-    },{
-            "Columns": 6,
-    "Rows": 1,
-    "Text": "JUST Jewellery",
-            "TextOpacity" : "0",
-            "BgMedia" : "https://i.ibb.co/5TqmnBc/just.jpg",
-    "TextHAlign": "left",
-    "TextVAlign": "middle",
-    "ActionType": "reply",
-            "ActionBody": "JUST Jewellery"
-    },{
-            "Columns": 6,
-    "Rows": 1,
-    "Text": "Silverado",
-            "TextOpacity" : "0",
-            "BgMedia" : "https://i.ibb.co/fGpcMSJ/silverado.jpg",
-    "TextHAlign": "left",
-    "TextVAlign": "middle",
-    "ActionType": "reply",
-    "ActionBody": "Silverado"
-    },{
-            "Columns": 6,
-    "Rows": 1,
-    "Text": "Poli",
-            "TextOpacity" : "0",
-            "BgMedia" : "https://i.ibb.co/WttKpyw/poli.jpg",
-    "TextHAlign": "left",
-    "TextVAlign": "middle",
-    "ActionType": "reply",
-    "ActionBody": "Poli"
-    }, {
-            "Columns": 6,
-    "Rows": 1,
-    "Text": "Цепочки",
-            "TextOpacity" : "0",
-            "BgMedia" : "https://i.ibb.co/GWcfB3r/cepochki.jpg",
-    "TextHAlign": "left",
-    "TextVAlign": "middle",
-    "ActionType": "reply",
-    "ActionBody": "Цепочки"
-    }, {
-            "Columns": 6,
-    "Rows": 1,
-    "Text": "Вернутся на главное меню",
-            "TextOpacity" : "0",
-            "BgMedia" : "https://i.ibb.co/CvGsX1t/message.jpg",
-    "TextHAlign": "left",
-    "TextVAlign": "middle",
-    "ActionType": "reply",
-    "ActionBody": "Вернутся на главное меню"
-    }]
-}
+    def __init__(self, type_bot=None):
+        self.create_buttons_paginations
+        self.create_buttons_name_days
+        
+
+    def create_buttons_paginations(self):
+        previous_dates_page = Button(text='<')
+        current_dates_page = Button(text='Дата')
+        next_dates_page = Button(text='>')
+        self.add_buttons([
+            previous_dates_page,
+            current_dates_page,
+            next_dates_page,
+        ])
+    
+    def create_buttons_name_days(self):
+        monday = Button(text='Пн')
+        tuesday = Button(text='Вт')
+        wednesday = Button(text='Ср')
+        thursday = Button(text='Чт')
+        friday  = Button(text='Пт')
+        saturday = Button(text='Сб')
+        # sunday viber off
+        self.add_buttons([
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+        ],
+)
+
+    def get_rows(self):
+        return len(self.buttons)
+
+    def get_columns_in_row(self, row_buttons):
+        return len(row_buttons)
+    
+    def __repr__(self):
+        pass
