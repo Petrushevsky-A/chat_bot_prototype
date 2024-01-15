@@ -15,6 +15,9 @@ from viberbot.api.viber_requests import ViberUnsubscribedRequest
 
 from starlette.requests import Request
 
+from ..templates.keyboard import DateKeyboard
+from ..templates.viber_serializer import ViberSerializerKeyboard 
+
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 handler = logging.StreamHandler()
@@ -32,8 +35,9 @@ viber = Api(BotConfiguration(
 ))
 
 @app.get('/')
-async def register_viberbot():
-    await viber.set_webhook("https://326d-90-151-94-184.ngrok-free.app")
+def register_viberbot(request: Request):
+    viber.unset_webhook()
+    viber.set_webhook("https://b8fa-90-151-94-184.ngrok-free.app")
     return Response(content = "Success",status_code=200)
 
 @app.post('/')
@@ -42,24 +46,35 @@ async def incoming(request: Request):
     # every viber message is signed, you can verify the signature using this method
     request_body = await request.body()
     request_param = request.query_params
+    request_header = request.headers
     print('='*33)
     print(f'{request=}')
     print(f'{request_body=}')
     print(f'{request_param=}')
+    print(f'{request_header=}')
     print('='*33)
-    # if not viber.verify_signature(request, request_param.get('sig')):
-    #     return Response(status=403)
-
+    if not viber.verify_signature(request_body , request_header.get('x-viber-content-signature')):
+        return Response(status_code=403)
+    #
     # this library supplies a simple way to receive a request object
     viber_request = viber.parse_request(request_body)
     print('='*33)
     print(f"{viber_request=}")
+    print(f"{isinstance(viber_request, ViberMessageRequest)=}")
     print('='*33)
     if isinstance(viber_request, ViberMessageRequest):
         message = viber_request.message
+        serializer_keyboard = ViberSerializerKeyboard(DateKeyboard()).set_buttons_data()
+        print('='*13+"KEYBOARD"+'='*13)
+        print(f'{serializer_keyboard.data=}')
+        print('='*33)
+        keyboard = KeyboardMessage(
+            keyboard=serializer_keyboard.data 
+        )
+
         # lets echo back
         await viber.send_messages(viber_request.sender.id, [
-            message,
+            keyboard ,
         ])
     elif isinstance(viber_request, ViberSubscribedRequest):
         await viber.send_messages(viber_request.get_user.id, [

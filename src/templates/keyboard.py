@@ -1,8 +1,8 @@
-from typing
+# from typing
 from .button import Button
 
 class Keyboard:
-    BUTTONS = []: List[List[Button]]
+    BUTTONS = [] #: List[List[Button]]
     
     def __add__(self, instance):
         return Keyboard().add_buttons(instance.BUTTONS)
@@ -13,8 +13,14 @@ class Keyboard:
 
 
     def add_buttons(self, instances=[]):
-        if not instances and any(map(isinstance(instances, Button))):
-           self.BUTTONS.extend(instances) 
+        print(f'add buttons METHOD  {instances=}')
+        if instances and any(
+            map(
+                lambda instance: isinstance(instance, Button),
+                instances
+            )
+        ):
+           self.BUTTONS.append(instances) 
 
 class ViberDateKeyboard():
     def __init__(self):
@@ -31,8 +37,8 @@ class VkDateKeyboard:
 
 class DateKeyboard(Keyboard):
     def __init__(self, type_bot=None):
-        self.create_buttons_paginations
-        self.create_buttons_name_days
+        self.create_buttons_paginations()
+        self.create_buttons_name_days()
         
 
     def create_buttons_paginations(self):

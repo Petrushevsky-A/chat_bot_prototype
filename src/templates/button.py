@@ -18,7 +18,7 @@ class Button:
     def __dict__():
         pass
 
-    def __repr__():
-        pass
+    def __repr__(self):
+        return self.text
 
     
