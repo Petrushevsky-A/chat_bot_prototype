@@ -8,12 +8,13 @@ class ViberSerializerKeyboard:
             'Type': 'keyboard',
             'Buttons': []
         }
+        self.set_buttons_data()
 
     
     def set_buttons_data(self):
         print('====KEYBOARD BUTTONS ====== SET =====')
-        print(f'{self.keyboard.BUTTONS=}')
-        for number_row, row_buttons in enumerate(self.keyboard.BUTTONS, 1):
+        print(f'{self.keyboard.buttons=}')
+        for number_row, row_buttons in enumerate(self.keyboard.buttons, 1):
             columns = int(self.WIDTH_COLUMNS/len(row_buttons))
             print('=====ROW BUTTONS====')
             print(f'{row_buttons=}')

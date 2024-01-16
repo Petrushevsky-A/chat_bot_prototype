@@ -14,9 +14,9 @@ from viberbot.api.viber_requests import ViberSubscribedRequest
 from viberbot.api.viber_requests import ViberUnsubscribedRequest
 
 from starlette.requests import Request
+import os
 
-from ..templates.keyboard import DateKeyboard
-from ..templates.viber_serializer import ViberSerializerKeyboard 
+from .router import Router
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -36,6 +36,7 @@ viber = Api(BotConfiguration(
 
 @app.get('/')
 def register_viberbot(request: Request):
+    # временное решение
     viber.unset_webhook()
     viber.set_webhook("https://b8fa-90-151-94-184.ngrok-free.app")
     return Response(content = "Success",status_code=200)
@@ -47,34 +48,15 @@ async def incoming(request: Request):
     request_body = await request.body()
     request_param = request.query_params
     request_header = request.headers
-    print('='*33)
-    print(f'{request=}')
-    print(f'{request_body=}')
-    print(f'{request_param=}')
-    print(f'{request_header=}')
-    print('='*33)
+
     if not viber.verify_signature(request_body , request_header.get('x-viber-content-signature')):
         return Response(status_code=403)
-    #
-    # this library supplies a simple way to receive a request object
-    viber_request = viber.parse_request(request_body)
-    print('='*33)
-    print(f"{viber_request=}")
-    print(f"{isinstance(viber_request, ViberMessageRequest)=}")
-    print('='*33)
-    if isinstance(viber_request, ViberMessageRequest):
-        message = viber_request.message
-        serializer_keyboard = ViberSerializerKeyboard(DateKeyboard()).set_buttons_data()
-        print('='*13+"KEYBOARD"+'='*13)
-        print(f'{serializer_keyboard.data=}')
-        print('='*33)
-        keyboard = KeyboardMessage(
-            keyboard=serializer_keyboard.data 
-        )
 
-        # lets echo back
+    viber_request = viber.parse_request(request_body)
+    if isinstance(viber_request, ViberMessageRequest):
+        answer = Router(viber_request).response
         await viber.send_messages(viber_request.sender.id, [
-            keyboard ,
+            answer,
         ])
     elif isinstance(viber_request, ViberSubscribedRequest):
         await viber.send_messages(viber_request.get_user.id, [
@@ -86,8 +68,4 @@ async def incoming(request: Request):
 
     return Response(content = "Success",status_code=200)
 
-#
-# import uvicorn
-#
-# if __name__ == "__main__":
-#     uvicorn.run("app:app", host="0.0.0.0", port=8080)
+
