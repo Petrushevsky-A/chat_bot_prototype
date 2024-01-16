@@ -18,6 +18,13 @@ class Router:
         print('=====ROUTER========')
         print(f'{dir(request)=}')
         print(f'{message=}') 
-        self.response = self.ROUTERS[message](request)
+        print(f'{message=}')
+
+        self.view, *self.methods = self.ROUTERS[message]
+        self.view = self.view(request)(request)
+        for method in self.methods:
+            getattr(self.view, method)()
+
+        self.response = self.view.response 
 
 
