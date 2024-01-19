@@ -6,22 +6,18 @@ class Router:
     ROUTERS = {
         '>': (DateView, 'next_page'),
         '<': (DateView, 'previous_page'),
-        'date':'',
+        'Дата':(DateView, 'zero_page'),
         'add_time_session':'',
         'del_time_session':'',
         'change_time_session':'',
     }
 
     def __init__(self, request):
-        message = request.message.text
+        route, *params = request.message.text.split()
 
-        print('=====ROUTER========')
-        print(f'{dir(request)=}')
-        print(f'{message=}') 
-        print(f'{message=}')
-
-        self.view, *self.methods = self.ROUTERS[message]
-        self.view = self.view(request)(request)
+        self.view, *self.methods = self.ROUTERS[route]
+        print(f'==={self.view=}')
+        self.view = self.view(request)
         for method in self.methods:
             getattr(self.view, method)()
 

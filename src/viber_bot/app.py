@@ -11,7 +11,6 @@ from viberbot.api.viber_requests import ViberConversationStartedRequest
 from viberbot.api.viber_requests import ViberFailedRequest
 from viberbot.api.viber_requests import ViberMessageRequest
 from viberbot.api.viber_requests import ViberSubscribedRequest
-from viberbot.api.viber_requests import ViberUnsubscribedRequest
 
 from starlette.requests import Request
 import os
@@ -38,7 +37,7 @@ viber = Api(BotConfiguration(
 def register_viberbot(request: Request):
     # временное решение
     viber.unset_webhook()
-    viber.set_webhook("https://b8fa-90-151-94-184.ngrok-free.app")
+    viber.set_webhook("chatbot-p.ru")
     return Response(content = "Success",status_code=200)
 
 @app.post('/')
@@ -48,8 +47,8 @@ async def incoming(request: Request):
     request_body = await request.body()
     request_param = request.query_params
     request_header = request.headers
-
-    if not viber.verify_signature(request_body , request_header.get('x-viber-content-signature')):
+    print(f'======== {request_body=}')
+    if not viber.verify_signature(request_body, request_header.get('x-viber-content-signature')):
         return Response(status_code=403)
 
     viber_request = viber.parse_request(request_body)
@@ -59,7 +58,7 @@ async def incoming(request: Request):
             answer,
         ])
     elif isinstance(viber_request, ViberSubscribedRequest):
-        await viber.send_messages(viber_request.get_user.id, [
+        viber.send_messages(viber_request.get_user.id, [
             TextMessage(text="thanks for subscribing!"),
         ])
     elif isinstance(viber_request, ViberFailedRequest):

@@ -41,20 +41,21 @@ class VkDateKeyboard:
 class DateKeyboard(Keyboard):
     STEP_PAGINATION = 18
 
-    def __init__(self, type_bot=None, page: int =None):
+    def __init__(self, type_bot=None, page: int = 0):
         super().__init__()
+        self.page = page
+
         self.create_buttons_paginations()
         # self.create_buttons_name_days()
 
-        self.page = page
         self.create_buttons_days()
 
         
 
     def create_buttons_paginations(self):
-        previous_dates_page = Button(text='<')
+        previous_dates_page = Button(text=f'< {self.page-1}')
         current_dates_page = Button(text='Дата')
-        next_dates_page = Button(text='>')
+        next_dates_page = Button(text=f'> {self.page+1}')
         self.add_buttons([
             previous_dates_page,
             current_dates_page,

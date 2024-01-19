@@ -5,8 +5,14 @@ class ViberSerializerKeyboard:
     def __init__(self, keyboard):
         self.keyboard = keyboard    
         self.data = {
-            'Type': 'keyboard',
-            'Buttons': []
+            'Type': 'rich_media',
+            "rich_media":{
+                  "Type":"rich_media",
+                  "ButtonsGroupColumns":6,
+                  "ButtonsGroupRows":7,
+                  "BgColor":"#FFFFFF",
+                  "Buttons":[]
+            }
         }
         self.set_buttons_data()
 
@@ -15,7 +21,7 @@ class ViberSerializerKeyboard:
         for number_row, row_buttons in enumerate(self.keyboard.buttons, 1):
             columns = int(self.WIDTH_COLUMNS/len(row_buttons))
             for button in row_buttons:
-                self.data['Buttons'].append({
+                self.data['rich_media']['Buttons'].append({
                     "Columns": columns,
                     "Rows": 1,
                     "Text": button.text,
